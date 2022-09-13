@@ -7,9 +7,12 @@
     import { pathGenerator } from '../_js/functions';
     import { colorScale_clusters} from '../_js/scales';
 
+    // This is just with a general data variable so wherever this is called it works (now in heatmap)
     export let data = [];
     export let n;
     export let bandwidth = 0;
+
+    $:console.log(data.nodes);
 
     const width = 500; 
     const height = 200;

@@ -9,17 +9,20 @@
     // External JS
     import { zoomFunction, brushFunction, links2Matrix, hclust, clusters, dendogram } from '../_js/functions';
     import { colorScale_edges } from '../_js/scales';
-    import { domain_min, domain_center, domain_max, linkage, threshold_clust } from '../stores.js';
+    import { domain_min, domain_center, domain_max, linkage, threshold_clust, _data_2 } from '../stores.js';
    
-    // Props
+    // Props , links and nodes can be called because they get their variable in app.svelte.
     export let nodes = [];
     export let links = [];
+    // Matrix is just a regular dataframe, can be replaced with other input but check how it links to non matrix dat
     let matrix = links2Matrix(nodes, links);
-
+    console.log(matrix);
+    
+    let othermatrix = $_data_2;
+    $:console.log(othermatrix);
     // Dimensions
     const width = 500;
     const height = 500;
-
     // Scales
     const rowScale = scaleBand().domain(nodes.map(d => d.label)).range([0, height]);
     const colScale = scaleBand().domain(nodes.map(d => d.label)).range([0, width]);
@@ -30,11 +33,12 @@
         links = links;
     }
 
-    // Clustering
+    // Clustering, the matrix is the actual data that is used for the hclust on line 37 (defined in 17)
+    // in orer for the order of the matrix to switch the imported node names need to be the same as the one from the other matrix
     const h_clustering = {nodes: [], links: [], clusters: []};
     $: {
         if ($linkage !== 'none') {
-            let clustering = hclust(matrix, $linkage);
+            let clustering = hclust(othermatrix, $linkage);
             h_clustering.nodes = clustering.root.descendants();
             h_clustering.links = dendogram(h_clustering.nodes).links;
             h_clustering.clusters = clusters(clustering, $threshold_clust, nodes.length);
@@ -46,8 +50,18 @@
         }
         rowScale.domain(nodes.map(d => d.label));
         colScale.domain(nodes.map(d => d.label));
-        links = links;
+        links = links; 
     }  
+
+    // To compare the difference between h_clustering.nodes data and the normal nodes data
+    // $:console.log(h_clustering.nodes);
+    $:console.log(nodes);
+    // $:console.log(h_clustering.links);
+    $:console.log(links);
+    $:console.log(h_clustering);
+
+
+
 
     // Binds
     let svg, g_heatmap;
@@ -57,7 +71,7 @@
 	});
 
 </script>
-
+<!-- the data created in dendrogram.svelte is filled here with the h_clustering variable, so that needs to be adjusted -->
 {#if $linkage !== "none"}
     <div>
         <Dendogram data={h_clustering} n={nodes.length} bandwidth={bandWidth}></Dendogram>

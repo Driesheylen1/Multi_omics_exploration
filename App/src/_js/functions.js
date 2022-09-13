@@ -107,6 +107,48 @@ export function links2Matrix(nodes, links) {
     return matrix;
 }
 
+//The other input data == the original data matrix, not the relation data. But check other data input
+export function csvToArray(str, delimiter = ";") {
+
+    // slice from \n index + 1 to the end of the text but not rading the end line (= blank values) in anymore, hence the -1
+    //-1 very crucial for this!! 
+    // use split to create an array of each csv value row
+    // 
+    const rows = str.slice(str.indexOf("\n") + 1, -1).split("\n");
+  
+    // Map the rows
+    // split values from each row into an array
+    // use headers.reduce to create an object
+    // object properties derived from headers:values
+    // the object passed as an element of the array
+    const arr = rows.map(function (row) {
+      const values = row.split(delimiter);
+      const el = (function (object, index) {
+        object = values[index];
+        return object;
+      }, {});
+      return values;
+    });
+
+    // return the array
+    return arr;
+  }
+  
+export function cosine (a, b) {
+    if (a.length !== b.length) return undefined;
+    let n = a.length;
+    let sum = 0;
+    let sum_a = 0;
+    let sum_b = 0;
+    for (let i = 0; i < n; ++i) {
+        sum += a[i] * b[i];
+        sum_a += a[i] * a[i];
+        sum_b += b[i] * b[i];
+    }
+    return Math.acos(sum / (Math.sqrt(sum_a) * Math.sqrt(sum_b)));
+}
+
+// Replacing cosine with "precomputed" works but then you need a square matrix 
 export function hclust(adjMatrix, linkage) {
     let matrix = druid.Matrix.from(adjMatrix);
     let H = new druid.Hierarchical_Clustering(matrix, linkage, "precomputed");

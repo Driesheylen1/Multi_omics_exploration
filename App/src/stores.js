@@ -23,7 +23,27 @@ export const transformK = writable(1);
 
 // Data
 export const toggle_sidebar = writable(false);
+// For the dendorgram data
+export const _data_2 = writable([]);
+export const myArray = _data_2;
+
+
+//The _data writable beneeth gets loaded in the sidebar component.
 export const _data = writable([]);
+
+export const nodes_2 = derived(_data, ($_data) => {
+    if (!$_data.nodes) {
+        return [];
+    }
+    if (!$_data.nodes[0].id) {
+        $_data.nodes.forEach((element, index) => element.id = index);
+    }
+    return $_data.nodes.map(d => d);
+});
+
+
+
+
 export const nodes = derived(_data, ($_data) => {
     if (!$_data.nodes) {
         return [];
@@ -43,7 +63,9 @@ export const links_network = derived(_data, ($_data) => {
     if (!$_data.links) {
         return [];
     }
-    const links = $_data.links.map(d => { return {source: d.source, target: d.target, value: d.value} });
+
+    // important to see that here to links are defined!! 
+ const links = $_data.links.map(d => { return {source: d.source, target: d.target, value: d.value} });
     return link_filter(links);
 });
 export const links_heatmap = derived(_data, ($_data) => {
@@ -58,3 +80,6 @@ export const link_variables = derived(_data, ($_data) => {
     }
     return Object.keys($_data.links[0]).filter(k => !(k === "source" || k === "target" || k === "referenceID" || k === "symmetricLink"))
 });
+
+// not needed here, should be put were variable is actually called
+// $:console.log(node_variables)

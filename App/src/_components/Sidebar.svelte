@@ -1,6 +1,7 @@
 <script>
 
-    import { toggle_sidebar, _data, threshold_edges, edge_width, threshold_clust, node_variables, link_variables, color_method_nodes, color_method_edges, domain_min, domain_max, domain_center, maxDepth, radius, linkage, renderVisuals, simulationPause } from '../stores.js';
+    import { toggle_sidebar, _data, _data_2, threshold_edges, edge_width, threshold_clust, node_variables, link_variables, color_method_nodes, color_method_edges, domain_min, domain_max, domain_center, maxDepth, radius, linkage, renderVisuals, simulationPause } from '../stores.js';
+    import { csvToArray } from '../_js/functions';
     import { onMount } from 'svelte';
     import { interpolateRdBu } from "d3-scale-chromatic";
     
@@ -74,8 +75,12 @@
         }
     }
 
-    // Input File
+    // Input File, i.e. the json visuals, but check how to change dendrogram in other input data!
     let file;
+    let file_dendrogram;
+    $:console.log(file)
+    $:console.log(file_dendrogram)
+
 	const reader = new FileReader()
 	$: {
 		if (file) {
@@ -95,6 +100,30 @@
 		}
 	};
 
+    
+	const reader_2 = new FileReader()
+	$: {
+		if (file_dendrogram) {
+            if (file_dendrogram.length > 0) {
+                reader_2.readAsText(file_dendrogram[0]);
+            }
+		}
+	}
+	reader_2.onload = function (event) {
+        $_data_2 = csvToArray(event.target.result);
+        run_btn.disabled = false;
+	}
+	reader_2.onprogress = function (event) {
+		if (event.loaded && event.total) {
+			const percentt = (event.loaded / event.total) * 100;
+			console.log(`Loaded: ${Math.round(percentt)}%`);
+		}
+	};
+
+
+
+    
+
 </script>
 
 <div class="bg-dark text-light" class:toggled={$toggle_sidebar} id="sidebar-wrapper">
@@ -104,6 +133,13 @@
             <label for="formFile" class="form-label">Input File</label>
             <input class="form-control" type="file" bind:files={file} id="formFile" accept=".json">
         </div>
+        
+<!-- Here the link to the other dendrogram data load csv in, check whether it worked and then adjust heatmap!! -->
+        <div class="mt-4 mb-2 mx-3">
+            <label for="formFile" class="form-label">Input File for clustering </label>
+            <input class="form-control" type="file" bind:files={file_dendrogram} id="formFile" accept=".csv">
+        </div>
+
         <div class="mt-4 mb-2 mx-3">
             <label for="threshold_edges" class="form-label">Threshold edges: {$threshold_edges}</label>
             <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={$threshold_edges} id="threshold_edges">
