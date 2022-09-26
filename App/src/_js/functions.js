@@ -137,10 +137,19 @@ export function dendogram(nodes) {
 
 export function clusters(H, t, n) {
     const H_clusters = H.get_clusters(t, "depth");
+    console.log(H_clusters);
     let I = Array.from({length: n});
     
     for (let cluster_index = 0; cluster_index < H_clusters.length; ++cluster_index) {
-        H_clusters[cluster_index].forEach(({index}) => I[index] = cluster_index)
+        
+        H_clusters[cluster_index].forEach(({index}) => {
+            if (H_clusters[cluster_index].length > 1) {
+                I[index] = cluster_index
+            } else {
+                I[index] = null;
+            }
+            
+        })
     }
     
     return I
