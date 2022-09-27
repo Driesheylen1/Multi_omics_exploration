@@ -4,7 +4,7 @@ import { drag } from 'd3-drag';
 import { brush } from 'd3-brush';
 import { mean } from 'd3-array';
 import { get } from 'svelte/store';
-import { toHighlight, nodeFilter, simulationPause, transformX, transformY, transformK, maxDepth } from '../stores.js';
+import { toHighlight, nodeFilter, simulationPause, transformX, transformY, transformK, maxDepth, clusterIndices } from '../stores.js';
 
 export function link_filter(links) {
     let links_filtered;
@@ -137,7 +137,6 @@ export function dendogram(nodes) {
 
 export function clusters(H, t, n) {
     const H_clusters = H.get_clusters(t, "depth");
-    console.log(H_clusters);
     let I = Array.from({length: n});
     
     for (let cluster_index = 0; cluster_index < H_clusters.length; ++cluster_index) {
@@ -151,6 +150,8 @@ export function clusters(H, t, n) {
             
         })
     }
+
+    clusterIndices.set([...new Set(I)].filter(k => k !== null));
     
     return I
 }

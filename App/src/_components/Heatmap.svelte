@@ -38,7 +38,7 @@
             h_clustering.nodes = clustering.root.descendants();
             h_clustering.links = dendogram(h_clustering.nodes).links;
             h_clustering.clusters = clusters(clustering, $threshold_clust, nodes.length);
-            nodes.forEach((d, i) => d.cluster = h_clustering.clusters[i]);
+            nodes.forEach((d, i) => d.cluster = h_clustering.clusters[d.id]);
             let order = clustering.root.index;
             nodes.sort((a,b) => order.indexOf(a.id) - order.indexOf(b.id));
         } else {

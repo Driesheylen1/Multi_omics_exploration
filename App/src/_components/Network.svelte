@@ -9,7 +9,7 @@
     import { onMount } from 'svelte';
 
     // External JS
-    import { threshold_edges, simulationPause, radius, toHighlight, nodeFilter, edge_width, maxDepth, color_method_nodes, color_method_edges } from '../stores';
+    import { threshold_edges, simulationPause, radius, toHighlight, nodeFilter, edge_width, maxDepth, color_method_nodes, color_method_edges, clusterIndices } from '../stores';
     import { zoomFunction, dragFunction, highlight, fade, toolTip } from '../_js/functions';
     import { colorScale_edges, colorScale_clusters } from '../_js/scales';
 
@@ -51,7 +51,7 @@
             c_diverging.domain([min(values),0,max(values)]);
         }        
     }
-    $: colorScale_clusters.domain([...Array($maxDepth).keys()]).unknown("grey");
+    $: colorScale_clusters.domain($clusterIndices).unknown("grey");
 
     // Simulation Forces
     const linkForce = forceLink().id(d => d.label);

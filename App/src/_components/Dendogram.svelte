@@ -3,7 +3,7 @@
     import { max } from 'd3-array';
     import { scaleLinear } from 'd3-scale';
 
-    import { threshold_clust, maxDepth, transformX, transformK } from '../stores';
+    import { threshold_clust, maxDepth, transformX, transformK, clusterIndices } from '../stores';
     import { pathGenerator } from '../_js/functions';
     import { colorScale_clusters} from '../_js/scales';
 
@@ -17,7 +17,7 @@
     const xScale = scaleLinear().domain([0, n]).range([0, width]);
     const yScale = scaleLinear().range([0, height]).nice();
     $: yScale.domain([max(data.nodes, node => node["depth"]), 0])
-    $: colorScale_clusters.domain([...Array($maxDepth).keys()]).unknown("grey");
+    $: colorScale_clusters.domain($clusterIndices).unknown("grey");
     const c_value = (source) => {
                     const cluster_set = new Set(source.index.map(i => data.clusters[i]))
                     return cluster_set.size > 1 ? "grey" : colorScale_clusters([...cluster_set.values()][0])
