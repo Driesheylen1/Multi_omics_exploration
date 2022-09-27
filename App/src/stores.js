@@ -20,6 +20,8 @@ export const domain_max = writable(1);
 export const transformX = writable(0);
 export const transformY = writable(0);
 export const transformK = writable(1);
+export const clusterIndices = writable([]);
+
 
 // Data
 export const toggle_sidebar = writable(false);

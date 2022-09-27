@@ -4,7 +4,7 @@ import { drag } from 'd3-drag';
 import { brush } from 'd3-brush';
 import { mean } from 'd3-array';
 import { get } from 'svelte/store';
-import { toHighlight, nodeFilter, simulationPause, transformX, transformY, transformK, maxDepth } from '../stores.js';
+import { toHighlight, nodeFilter, simulationPause, transformX, transformY, transformK, maxDepth, clusterIndices } from '../stores.js';
 
 export function link_filter(links) {
     let links_filtered;
@@ -182,9 +182,17 @@ export function clusters(H, t, n) {
     let I = Array.from({length: n});
     
     for (let cluster_index = 0; cluster_index < H_clusters.length; ++cluster_index) {
-        H_clusters[cluster_index].forEach(({index}) => I[index] = cluster_index)
-    }
+        H_clusters[cluster_index].forEach(({index}) => {
+            if (H_clusters[cluster_index].length > 1) {
+                I[index] = cluster_index
+            } else {
+                I[index] = null;
+            }
+
+        })    }
     
+    clusterIndices.set([...new Set(I)].filter(k => k !== null));
+
     return I
 }
 
