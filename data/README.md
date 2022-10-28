@@ -1,4 +1,4 @@
-This folder contains data analogue to the UK biobank dataset that can be usedto try out our visual design.
+This folder contains data analogue to the UK biobank dataset upon which the BioMOBS workflow was applied. Users can use this data to try out our visual design.
 
 - 'testdata.json'
 is the data that can be imported in the MOBS toolset to explore the usecase data based on correlation analyses. 
