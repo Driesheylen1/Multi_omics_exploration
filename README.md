@@ -1,5 +1,5 @@
 # MOBS - Multi-Omics Brush for Subgraph visualisation
-One one of the big opportunities in multi-omics analysis is the identification of interactions between molecular entities and their
+One of the big opportunities in multi-omics analysis is the identification of interactions between molecular entities and their
 association with diseases. In analyzing and expressing these interactions in the search for new hypotheses, multi-omics data
 is often either translated into matrices containing pairwise correlations and distances, or visualized as node-link diagrams. A
 major problem when visualizing large networks however is the occurrence of hairball-like graphs, from which little to none
