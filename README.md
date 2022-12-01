@@ -37,6 +37,8 @@ npm run start
 ```
 7. Navigate to [localhost:5000](http://localhost:5000). You should now see the app running.
 
+To perform the data analyeses properly, both the json and csv file need to be loaded. Without the csv file hierarchical clustering can not be performed.
+
 ## Data requirements
 The input data needs to be off the format `.json`, and contains the following arrays with values:
 ```Javascript
